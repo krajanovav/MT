@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 
 
 }
@@ -52,6 +53,15 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    kapt {
+        correctErrorTypes = true
+        arguments {
+            // Remove unnecessary arguments and keep only essential ones
+            arg("dagger.hilt.android.internal.projectType", "APP")
+        }
+    }
+
+
 }
 
 dependencies {
