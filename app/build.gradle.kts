@@ -82,7 +82,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-
+    implementation("androidx.navigation:navigation-compose:2.8.1")
 
 
     implementation("androidx.room:room-runtime:2.6.1")
@@ -93,6 +93,7 @@ dependencies {
 
     implementation ("com.google.dagger:hilt-android:2.52")
     kapt ("com.google.dagger:hilt-android-compiler:2.52")
+    implementation(kotlin("script-runtime"))
 
 
 }
