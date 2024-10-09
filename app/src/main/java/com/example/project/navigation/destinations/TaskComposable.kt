@@ -10,10 +10,9 @@ import com.example.project.util.Constants.LIST_SCREEN
 import com.example.project.util.Constants.TASK_ARGUMENT_KEY
 import com.example.project.util.Constants.TASK_SCREEN
 
-fun NavGraphBuilder.taskComposable
-            (navigateToListScreen: (Action) -> Unit)
-{
-
+fun NavGraphBuilder.taskComposable(
+    navigateToListScreen: (Action) -> Unit
+){
     composable(
         route = TASK_SCREEN,
         arguments = listOf(navArgument(TASK_ARGUMENT_KEY){

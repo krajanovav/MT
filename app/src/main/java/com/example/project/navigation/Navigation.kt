@@ -6,22 +6,30 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.example.project.navigation.destinations.listComposable
 import com.example.project.navigation.destinations.taskComposable
+import com.example.project.ui.viewmodels.SharedViewModel
 import com.example.project.util.Constants.LIST_SCREEN
 
 @Composable
 fun SetupNavigation(
-    navController: NavHostController
-){
-    val screen = remember(navController){
+    navController: NavHostController,
+    sharedViewModel: SharedViewModel
+) {
+    val screen = remember(navController) {
         Screens(navController = navController)
     }
-    NavHost(navController =navController, startDestination = LIST_SCREEN )
-    {
+
+    NavHost(
+        navController = navController,
+        startDestination = "list/{action}" // zde je potřeba zajistit, aby bylo vždy předáno {action}
+    ) {
         listComposable(
-            navigateToTaskScreen = screen.task
+            navigateToTaskScreen = screen.task,
+            sharedViewModel = sharedViewModel
         )
-        taskComposable (
-            navigateToListScreen = screen.list
+        taskComposable(
+            navigateToListScreen = { action ->
+                screen.list(action) // předáváme správný action argument
+            }
         )
     }
 }

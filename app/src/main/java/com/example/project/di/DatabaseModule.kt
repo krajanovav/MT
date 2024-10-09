@@ -28,6 +28,6 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDao(databse:ToDoDatabase)=databse.toDoDao()
+    fun provideDao(database: ToDoDatabase) = database.toDoDao()
 
 }
