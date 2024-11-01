@@ -15,6 +15,7 @@ import com.example.project.ui.theme.fabBackgroundColor
 import com.example.project.ui.viewmodels.SharedViewModel
 import com.example.project.util.Action
 import com.example.project.util.SearchAppBarState
+import com.example.project.ui.screens.list.ListContent
 
 @Composable
 fun ListScreen(
@@ -34,7 +35,9 @@ fun ListScreen(
                 searchTextState = searchTextState
             )
         },
-        content = {},
+        content = {
+            ListContent()
+        },
         floatingActionButton = {
             ListFab(onFabClicked = navigateToTaskScreen)
         }
