@@ -8,4 +8,6 @@
     <string name="sort_action">Sort Tasks</string>
     <string name="delete_all_action">Delete All</string>
     <string name="add_button">Add Button</string>
+    <string name ="sad_face_icon">Sad Face Icon</string>
+    <string name="no_tasks_found">No Tasks Found.</string>
 </resources>

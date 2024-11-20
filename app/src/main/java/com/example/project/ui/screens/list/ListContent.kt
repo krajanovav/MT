@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,15 +29,53 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.project.data.models.Priority
 import com.example.project.ui.theme.LARGE_PADDING
 import com.example.project.ui.theme.PRIORITY_INDICATOR_SIZE
 import com.example.project.ui.theme.taskItemTextColor
+import com.example.project.util.RequestState
 
+@ExperimentalMaterialApi
 @Composable
-fun ListContent(){
+fun ListContent(
+    tasks: RequestState<List<ToDoTask>>,
+    navigateToTaskScreen: (taskId: Int) -> Unit
+){
+    if (tasks is RequestState.Success){
+        if (tasks.data.isEmpty()){
+            EmptyContent()
+        }else  {
+            DisplayTasks(
+                tasks = tasks.data,
+                navigateToTaskScreen = navigateToTaskScreen
+            )
 
+        }
+    }
 }
+
+@ExperimentalMaterialApi
+@Composable
+fun DisplayTasks(
+    tasks: List<ToDoTask>,
+    navigateToTaskScreen: (taskId: Int) -> Unit
+){
+
+    LazyColumn {
+        items(
+            items = tasks,
+            key = {task ->
+                task.id
+            }
+        ){   task ->
+            TaskItem(
+                toDoTask = task,
+                navigateToTaskScreen = navigateToTaskScreen)
+        }
+    }
+}
+
 @ExperimentalMaterialApi
 @Composable
 fun TaskItem(
@@ -70,9 +112,9 @@ fun TaskItem(
                     .weight(1f),
                     contentAlignment = Alignment.TopEnd
                 ){
-                    Canvas(modifier = Modifier
-                        .width(PRIORITY_INDICATOR_SIZE)
-                        .height(PRIORITY_INDICATOR_SIZE)
+                    Canvas(
+                        modifier = Modifier
+                            .size(PRIORITY_INDICATOR_SIZE)
                     ){
                         drawCircle(
                             color = toDoTask.priority.color
