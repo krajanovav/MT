@@ -30,8 +30,9 @@ fun SetupNavigation(
         )
         taskComposable(
             navigateToListScreen = { action ->
-                screen.list(action) // předáváme správný action argument
-            }
+                screen.list(action)},
+            sharedViewModel = sharedViewModel// předáváme správný action argument
+
         )
     }
 }
