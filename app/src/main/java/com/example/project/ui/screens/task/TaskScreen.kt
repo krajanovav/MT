@@ -1,5 +1,8 @@
 package com.example.project.ui.screens.task
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -9,7 +12,9 @@ import com.example.project.ui.viewmodels.SharedViewModel
 import com.example.project.util.Action
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.platform.LocalContext
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun TaskScreen(
     selectedTask: ToDoTask?,
@@ -21,17 +26,23 @@ fun TaskScreen(
     val description: String by sharedViewModel.description
     val priority: Priority by sharedViewModel.priority
 
-    // Synchronizace `selectedTask` s ViewModelem
-    androidx.compose.runtime.LaunchedEffect(selectedTask) {
-        println("LaunchedEffect - Updating ViewModel with selectedTask: $selectedTask")
-        sharedViewModel.updateTaskFields(selectedTask)
-    }
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
             TaskAppBar(
                 selectedTask = selectedTask,
-                navigateToListScreen = navigateToListScreen
+                navigateToListScreen = {
+                    action -> if (action==Action.NO_ACTION){
+                        navigateToListScreen(action)
+                    }else{
+                        if (sharedViewModel.validateFields()){
+                            navigateToListScreen(action)
+                        }else{
+                            displayToast(context = context)
+                        }
+                }
+                }
             )
         },
         content = {
@@ -43,7 +54,7 @@ fun TaskScreen(
                 title = title,
                 onTitleChange = {
                     println("TaskScreen - Updated Title: $it")
-                    sharedViewModel.title.value = it
+                    sharedViewModel.updateTitle(it)
                 },
                 description = description,
                 onDescriptionChange = {
@@ -58,4 +69,12 @@ fun TaskScreen(
             )
         }
     )
+}
+fun displayToast(context: Context){
+    Toast.makeText(
+        context,
+        "Fields Empty.",
+        Toast.LENGTH_SHORT
+    ).show()
+
 }
