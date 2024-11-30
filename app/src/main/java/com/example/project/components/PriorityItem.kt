@@ -1,6 +1,7 @@
 package com.example.project.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,21 +16,22 @@ import com.example.project.data.models.Priority
 import com.example.project.ui.theme.LARGE_PADDING
 import com.example.project.ui.theme.PRIORITY_INDICATOR_SIZE
 import com.example.project.ui.theme.Typography
+import com.example.project.ui.theme.taskItemTextColor
 
 @Composable
 fun PriorityItem(priority: Priority) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Canvas(modifier = Modifier.size(PRIORITY_INDICATOR_SIZE)){
-            drawCircle(color = priority.color)
+        Canvas(modifier = Modifier.size(PRIORITY_INDICATOR_SIZE)) {
+            drawCircle(color = priority.color) // Kruh s barvou priority
         }
         Text(
             modifier = Modifier
                 .padding(start = LARGE_PADDING),
             text = priority.name,
             style = Typography.subtitle1,
-            color = MaterialTheme.colors.onSurface
+            color = androidx.compose.material.MaterialTheme.colors.taskItemTextColor,
         )
     }
 }
