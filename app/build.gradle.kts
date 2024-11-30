@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+
 }
 
 android {
@@ -41,7 +42,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.2"
     }
     packaging {
         resources {
@@ -93,4 +94,6 @@ dependencies {
     implementation ("androidx.compose.material:material-icons-extended:1.5.1")
     implementation ("androidx.compose.material:material:1.5.1")
     implementation ("com.google.android.material:material:1.5.0")
+    implementation("androidx.compose.foundation:foundation:1.5.0")
+    implementation("androidx.compose.ui:ui:1.5.0")
 }

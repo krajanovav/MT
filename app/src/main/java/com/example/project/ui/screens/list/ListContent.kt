@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import com.example.project.data.models.ToDoTask
 import com.example.project.navigation.Screens
 import com.example.project.ui.theme.TASK_ITEM_ELEVATION
-import com.example.project.ui.theme.taskItemBackroundColor
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
@@ -33,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.project.data.models.Priority
 import com.example.project.ui.theme.LARGE_PADDING
 import com.example.project.ui.theme.PRIORITY_INDICATOR_SIZE
+import com.example.project.ui.theme.taskItemBackgroundColor
 import com.example.project.ui.theme.taskItemTextColor
 import com.example.project.util.RequestState
 
@@ -85,11 +85,14 @@ fun TaskItem(
     Surface(
         modifier=Modifier
         .fillMaxWidth(),
-        color=MaterialTheme.colors.taskItemBackroundColor,
+        color=MaterialTheme.colors.taskItemBackgroundColor,
         shape = RectangleShape,
         elevation= TASK_ITEM_ELEVATION,
         onClick = {
+            println("Navigating to task ID: ${toDoTask.id}")
             navigateToTaskScreen(toDoTask.id)
+
+
         }
 
         ){
