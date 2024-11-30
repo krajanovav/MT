@@ -10,7 +10,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.project.ui.screens.list.TaskItem
 import com.example.project.ui.screens.task.TaskScreen
 import com.example.project.ui.viewmodels.SharedViewModel
 import com.example.project.util.Action
@@ -31,10 +30,15 @@ fun NavGraphBuilder.taskComposable(
     ) { navBackStackEntry ->
         val taskId = navBackStackEntry.arguments!!.getInt(TASK_ARGUMENT_KEY)
         sharedViewModel.getSelectedTask(taskId = taskId)
+        //Log.d("getSelectedtask",taskId.toString())
         val selectedTask by sharedViewModel.selectedTask.collectAsState()
 
         LaunchedEffect(key1 = selectedTask) {
-            sharedViewModel.updateTaskFields(selectedTask = selectedTask)
+            //Log.d("updateTaskFields",selectedTask.toString())
+            if (selectedTask!=null||taskId==-1){
+                sharedViewModel.updateTaskFields(selectedTask = selectedTask)
+            }
+
         }
 
         TaskScreen(
