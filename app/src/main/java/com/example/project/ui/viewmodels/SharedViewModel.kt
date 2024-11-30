@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.project.data.models.Priority
 import com.example.project.data.models.ToDoTask
 import com.example.project.data.repositories.ToDoRepository
+import com.example.project.util.Action
 import com.example.project.util.RequestState
 import com.example.project.util.SearchAppBarState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,11 +18,15 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
+import com.example.project.util.Constants.MAX_TITLE_LENGTH
+import kotlinx.coroutines.Dispatchers
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(
     private val repository: ToDoRepository
 ) : ViewModel() {
+
+    val action: MutableState<Action> = mutableStateOf(Action.NO_ACTION)
 
     val id: MutableState<Int> = mutableStateOf(0)
     val title: MutableState<String> = mutableStateOf("")
@@ -62,6 +67,41 @@ class SharedViewModel @Inject constructor(
         }
     }
 
+    private fun addTask(){
+        viewModelScope.launch(Dispatchers.IO){
+            val toDoTask=ToDoTask(
+            title = title.value,
+            description=description.value,
+            priority=priority.value
+            )
+            repository.addTask(toDoTask=toDoTask)
+        }
+    }
+
+    fun handleDatabaseActions(action: Action){
+        when(action){
+            Action.ADD ->{
+                addTask()
+            }
+            Action.UPDATE ->{
+                addTask()
+            }
+            Action.DELETE ->{
+                addTask()
+            }
+            Action.DELETE_ALL ->{
+                addTask()
+            }
+            Action.UNDO ->{
+                addTask()
+            }else->{
+
+            }
+
+        }
+        this.action.value=Action.NO_ACTION
+    }
+
     fun updateTaskFields(selectedTask: ToDoTask?) {
         if (selectedTask != null) {
             println("Updating fields with task: $selectedTask")
@@ -75,6 +115,14 @@ class SharedViewModel @Inject constructor(
             description.value = ""
             priority.value = Priority.LOW
         }
+    }
+    fun updateTitle(newTitle: String){
+        if (newTitle.length < MAX_TITLE_LENGTH){
+            title.value = newTitle
+        }
+    }
+    fun validateFields(): Boolean{
+        return title.value.isNotEmpty()&& description.value.isNotEmpty()
     }
 
 }
