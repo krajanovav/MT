@@ -96,4 +96,5 @@ dependencies {
     implementation ("com.google.android.material:material:1.5.0")
     implementation("androidx.compose.foundation:foundation:1.5.0")
     implementation("androidx.compose.ui:ui:1.5.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }

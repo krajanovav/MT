@@ -1,7 +1,12 @@
 package com.example.project.ui.screens.list
 
+import android.annotation.SuppressLint
 import android.view.Surface
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -35,7 +40,12 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.rememberDismissState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -56,6 +66,8 @@ import com.example.project.ui.theme.taskItemTextColor
 import com.example.project.util.Action
 import com.example.project.util.RequestState
 import com.example.project.util.SearchAppBarState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @Composable
@@ -133,6 +145,7 @@ fun HandleListContent(
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @ExperimentalMaterialApi
 @Composable
 fun DisplayTasks(
@@ -153,25 +166,51 @@ fun DisplayTasks(
             val dismissDirection = dismissState.dismissDirection
             val isDismissed = dismissState.isDismissed(DismissDirection.EndToStart)
             if(isDismissed && dismissDirection == DismissDirection.EndToStart){
-                onSwipeToDelete(Action.DELETE, task)
+                val scope = rememberCoroutineScope()
+                scope.launch {
+                    delay(300)
+                    onSwipeToDelete(Action.DELETE, task)
+                }
             }
             val degrees by animateFloatAsState(
                 if(dismissState.targetValue == DismissValue.Default)
                     0f
                 else -45f
             )
-            SwipeToDismiss(
-                state = dismissState,
-                directions = setOf(DismissDirection.EndToStart),
-                dismissThresholds = {FractionalThreshold(fraction = 0.2f)},
-                background = { RedBackground(degrees = degrees)},
-                dismissContent = {
-                    TaskItem(
-                        toDoTask = task,
-                        navigateToTaskScreen = navigateToTaskScreen)
-                }
-            )
-        }
+
+            var itemAppeared by remember{
+                mutableStateOf(false)
+            }
+            LaunchedEffect(key1 = true){
+                itemAppeared = true
+            }
+            AnimatedVisibility(
+                visible = itemAppeared && !isDismissed,
+                enter = expandVertically  (
+                    animationSpec = tween(
+                        durationMillis = 300
+                    )
+                ),
+                exit = shrinkVertically (
+                    animationSpec = tween(
+                        durationMillis = 300
+                    )
+                )
+
+                ) {
+                SwipeToDismiss(
+                    state = dismissState,
+                    directions = setOf(DismissDirection.EndToStart),
+                    dismissThresholds = {FractionalThreshold(fraction = 0.2f)},
+                    background = { RedBackground(degrees = degrees)},
+                    dismissContent = {
+                        TaskItem(
+                            toDoTask = task,
+                            navigateToTaskScreen = navigateToTaskScreen)
+                    }
+                )
+            }
+            }
     }
 }
 
