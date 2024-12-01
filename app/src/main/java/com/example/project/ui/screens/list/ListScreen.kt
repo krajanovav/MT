@@ -1,7 +1,6 @@
 package com.example.project.ui.screens.list
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -24,7 +23,6 @@ import com.example.project.ui.theme.fabBackgroundColor
 import com.example.project.ui.viewmodels.SharedViewModel
 import com.example.project.util.Action
 import com.example.project.util.SearchAppBarState
-import com.example.project.ui.screens.list.ListContent
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -37,12 +35,16 @@ fun ListScreen(
 ) {
     LaunchedEffect(key1 = true) {
         sharedViewModel.getAllTasks()
+        sharedViewModel.readSortState()
     }
 
     val action by sharedViewModel.action
 
     val allTasks by sharedViewModel.allTasks.collectAsState()
     val searchedTasks by sharedViewModel.searchedTasks.collectAsState()
+    val sortState by sharedViewModel.sortState.collectAsState()
+    val lowPriorityTasks by sharedViewModel.lowPriorityTasks.collectAsState()
+    val highPriorityTasks by sharedViewModel.highPriorityTasks.collectAsState()
 
     val searchAppBarState: SearchAppBarState
             by sharedViewModel.searchAppBarState
@@ -75,6 +77,9 @@ fun ListScreen(
             ListContent(
                 allTasks = allTasks,
                 searchedTasks =  searchedTasks,
+                lowPriorityTasks= lowPriorityTasks,
+                highPriorityTasks = highPriorityTasks,
+                sortState= sortState,
                 searchAppBarState= searchAppBarState,
                 navigateToTaskScreen = navigateToTaskScreen
             )
